@@ -1,53 +1,53 @@
-const mongoose =require("mongoose")
+const mongoose = require("mongoose")
 
-const courseSchema =new mongoose.Schema({
+const courseSchema = new mongoose.Schema({
 
-    courseName:{
-        type:String,
-        trim:true,
-
-    },
-    courseDecription:{
-        type:String,
-        trim:true,
+    courseName: {
+        type: String,
+        trim: true,
 
     },
-    instructor:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"User",
-        required:true,
+    courseDecription: {
+        type: String,
+        trim: true,
+
     },
-    whatYouWillLearn:{
-        type:String,
+    instructor: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
     },
-    courseContent:[
+    whatYouWillLearn: {
+        type: String,
+    },
+    courseContent: [
         {
-            type:mongoose.Schema.Types.ObjectId,
-            ref:"Section",
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Section",
         }
     ],
 
-    ratingAndReviews:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"RatingAndReview ",
+    ratingAndReviews: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "RatingAndReview ",
     }],
-    price:{
-        type:Number,
+    price: {
+        type: Number,
     },
-    thumbnail:{
-        type:String,
+    thumbnail: {
+        type: String,
     },
-    tag:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Tag",
+    tag: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Tag",
     },
-    studentEnrolled:[
+    studentEnrolled: [
         {
-            type:mongoose.Schema.Types.ObjectId,
-            required:true,
-            ref:User,
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: User,
         }
     ],
 
 });
-module.exports =mongoose.model("CourseSchema",courseSchema);
+module.exports = mongoose.model("CourseSchema", courseSchema);
