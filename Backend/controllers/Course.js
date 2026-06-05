@@ -13,7 +13,7 @@ exports.createCourse = async (req, res) => {
         const thumbnail = req.files.thumbnailImage;
 
         //validation 
-        if (!courseName || !courseDescription || !whatYoutWillLearn || !price || !tags || !thumbnail) {
+        if (!courseName || !courseDescription || !whatYoutWillLearn || !price || !tag || !thumbnail) {
             return res.status(400).json({
                 success: false,
                 message: 'all fields are required',
@@ -38,7 +38,7 @@ exports.createCourse = async (req, res) => {
                 message: "Tag details not found",
             })
         }
-        //upload image tga cloudinary
+        //upload image tag cloudinary>
         const thumbnailImage = await uploadImageToCloudinary(thumbnail, process.env.FOLDER_NAME);
 
         //create an entry for new Course
@@ -54,6 +54,10 @@ exports.createCourse = async (req, res) => {
 
     }
     catch (error) {
+        return res.status(500).json({
+            status: false,
+            message: ""
+        })
 
     }
 }
