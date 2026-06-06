@@ -56,8 +56,12 @@ exports.createCourse = async (req, res) => {
     catch (error) {
         return res.status(500).json({
             status: false,
-            message: ""
-        })
+            message: "Could not initiate order"
+        });
 
     }
-}
+};
+//verify signature of Rozorpay and server
+
+
+
