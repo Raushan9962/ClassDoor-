@@ -80,5 +80,67 @@ exports.capturePayment = async (req, res) => {
 
     }
 
-    //return response
-}
+
+};
+exports.varifySignature = async (req, res) => {
+    const webhookSecret = "123456",
+    const signature = req.headers["x-razorpay-signature"];
+    const shasum = crypto.createHmac("sha256", webhookSecret);
+    shasum.update(JSON.stringify(req.body));
+    const digits = shasum.digest('hex');
+    if (signature = digits) {
+        console.log("Payment is Authorised");
+        const { courseId, userId } = req.body.payload.payment.entity.notes;
+        try {
+
+            //fullfill the screen 
+
+            const enrolledCourse = await Course.findOneAndUpdate(
+                { _id: courseId }, { $push: { studentsEnrolled: userId } },
+                { new: true },
+            );
+            if (!enrolledCourse) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Course not Found',
+                })
+            }
+            console.log(enrolledCourse);
+
+            //find the course and enroll the student in it
+            const enrolledStudent = await User.findOneAndUpdate({ _id: userId }, { $push: { courses: courseId } },
+                { new: true },
+            );
+            console.log(enrolledStudent);
+            //mail send kardo conformation wala
+            const emailResponse = await mailSender(
+                enrolledStudent.email,
+                "Congratutaions from ClassDoor",
+                "Congratulation, you are onborded into new classDoor course",
+
+            );
+            console.log(enrolledStudent);
+            return res.status(200).json({
+                success: true,
+                message: "Signature Varified and Course added",
+            });
+        }
+
+        catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                success: false,
+                message: error.message,
+
+
+            })
+
+        }
+    }
+    else {
+        return res.status(400).json({
+            success: false,
+            message: "Could not ind the course",
+        })
+    }
+};
