@@ -54,3 +54,70 @@ exportd.showAllcategorys = async (req, res) => {
         })
     }
 }
+//categaryPageDetaisl
+exports.categaryPageDetails = async (req, res) => {
+    try {
+        //get categaryID
+        const { categaryId } = req.body;
+        //get courses for spacified categaryId
+        const selectedCategary = await categaryId.findById(categaryId).populate("courses").exex();
+
+        //validation  
+        if (!selectedCategary) {
+            return res.status(404).json({
+                success: false, message: "Data not found"
+            });
+        }
+        //get coursesfor different categary
+        const differentCategary = await categaryId.find({
+            _id: { $ne: categaryId }, //ne ka matlab not equal to 
+        })
+            .populate("caures")
+            .exec();
+
+        //get top selling courses
+        const topSellingCourses = await Course.aggregate([
+            {
+                $match: {
+                    category: new mongoose.Types.ObjectId(categoryId)
+                }
+            },
+            {
+                $addFields: {
+                    totalStudents: { $size: "$studentsEnrolled" }
+                }
+            },
+            {
+                $sort: {
+                    totalStudents: -1
+                }
+            },
+            {
+                $limit: 10
+            }
+        ]);
+
+        return res.status(200).json({
+            success: true,
+            data: topSellingCourses,
+        });
+        //return response
+        return res.status(200).json({
+            success: true,
+            data: {
+                selectedCategary,
+                differentCategary,
+            }
+        })
+
+
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: Error.message,
+        })
+
+    }
+}

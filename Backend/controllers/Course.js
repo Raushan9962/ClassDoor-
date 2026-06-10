@@ -1,5 +1,5 @@
 const Course = require("../models/Course")
-const Tag = require("../models/Tags");
+const Tag = require("../models/Category");
 const User = require("../models/User");
 const { upladImageToCloudinary, uploadImageToCloudinary } = require("../utils/imageUploader");
 
@@ -61,7 +61,70 @@ exports.createCourse = async (req, res) => {
 
     }
 };
-//verify signature of Rozorpay and server
+exports.getAllCourses = async (req, res) => {
+    //get id
+    const { courseId } = req.body;
+    // find all course
+    const allCourses = await Course.find(
+        {
+            _id: courseId
+        }
+    )
+
+};
+
+//get CourseDetails
+exports.getCourseDetails = async (req, res) => {
+    try {
+        //get id 
+        const { courseId } = req.body;
+        //find course details
+        const courseDetails = await Course.find({
+            _id: courseId
+        }).populate(
+            {
+                path: "instructor",
+                populate: {
+                    path: "additionalDetails",
+                },
+            }
+        )
+            .populate("category")
+            .populate("ratingAndReciews")
+            .populate({
+                path: "courseContent",
+                populate: {
+                    path: "subSection",
+                },
+            })
+            .exec();
+
+        //validation
+        if (!courseDetails) {
+            return res.status(400).json({
+                success: false,
+                message: `Could not find the course wirh ${courseId}`
+            });
+
+        }
+        //return response
+        return res.status(400).json({
+            success: true,
+            message: "CourseDetails fetched successfully",
+            data: courseDetails,
+        })
+
+
+
+    }
+    catch (error) {
+        return res.status(500).json({
+            success: true,
+            message: error.message,
+        })
+
+    }
+}
 
 
 
