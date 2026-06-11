@@ -35,7 +35,7 @@ exports.createCategory = async (req, res) => {
     }
 };
 // getAlltags handler function
-exportd.showAllcategorys = async (req, res) => {
+exports.showAllcategorys = async (req, res) => {
     try {
         const allTags = await Tag.find({}, { name: true, description: true });
         res.status(200).json(
