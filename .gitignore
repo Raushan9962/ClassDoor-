@@ -1,18 +1,32 @@
-git commit -m "Initial clean commit"Backend / node_modules /
-    Backend /.env
+# Dependencies
+node_modules/
+Backend/node_modules/
 
-logs /
+# Environment variables
+.env
+Backend/.env
+
+# Logs
+logs/
 *.log
-npm - debug.log *
+npm-debug.log*
+yarn-error.log*
 
-    dist /
-    build /Backend/
-.cache /
+# Builds
+dist/
+build/
+Backend/build/
+
+# Cache
+.cache/
+
+# OS/IDE
 .DS_Store
 Thumbs.db
-    .vscode /
-.idea /
+.vscode/
+.idea/
 
-.pem
-        .key
-        .crt
+# Certificates
+*.pem
+*.key
+*.crt

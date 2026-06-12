@@ -27,9 +27,11 @@ router.delete("/deleteSubSection", auth, isInstructor, deleteSubSection)
 //add a sub section to a section 
 router.post("/addSubSection", auth, isInstructor, createSubSection)
 
-router.get("/getAllCourses", auth, getAllCourses)
-router.get("/getCourseDetails", auth, getCourseDetails)
-router.post("/createRating", auth, createRating)
+router.get("/getAllCourses", auth, isStudent, getAllCourses)
+router.get("/getCourseDetails", auth, isAdmin, getCourseDetails)
+//create course Rating 
+router.post("/createRating", auth, isStudent, createRating)
+//get hoga average 
 router.get("/getAverageRating", getAverageRating)
 router.get("/getAllRating", getAllRating)
 module.exports = router
